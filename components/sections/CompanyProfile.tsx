@@ -82,36 +82,36 @@ export default function CompanyProfile({ ticker }: CompanyProfileProps) {
 
   if (!ticker) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold mb-4">Company Profile</h2>
-        <div className="flex items-center justify-center h-64 text-gray-500">
-          <p>Select a stock to view company information</p>
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Company Profile</h2>
+        <div className="flex items-center justify-center h-48 text-gray-500 dark:text-gray-400">
+          <p className="text-sm">Select a stock to view company information</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">Company Profile - {ticker}</h2>
+    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Company Profile - {ticker}</h2>
 
       {isLoading && (
-        <div className="flex items-center justify-center h-64">
+        <div className="flex items-center justify-center h-48">
           <div className="text-center">
-            <Spinner size="lg" />
-            <p className="mt-2 text-gray-600">Loading company data...</p>
+            <Spinner size="md" />
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Loading company data...</p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="flex items-center justify-center h-64">
+        <div className="flex items-center justify-center h-48">
           <div className="text-center">
-            <p className="text-red-600 mb-2">Failed to load company data</p>
-            <p className="text-sm text-gray-500 mb-4">{error}</p>
+            <p className="text-red-600 dark:text-red-400 mb-2 text-sm">Failed to load company data</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{error}</p>
             <button
               onClick={() => ticker && fetchCompanyData(ticker)}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700"
+              className="px-3 py-1.5 bg-indigo-600 text-white rounded-md text-xs hover:bg-indigo-700"
             >
               Retry
             </button>
@@ -120,35 +120,35 @@ export default function CompanyProfile({ ticker }: CompanyProfileProps) {
       )}
 
       {companyData && !isLoading && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Company Overview */}
           <div>
-            <h3 className="text-lg font-semibold mb-3 text-gray-900">{companyData.name}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <h3 className="text-base font-semibold mb-2 text-gray-900 dark:text-white">{companyData.name}</h3>
+            <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
-                <p className="text-sm text-gray-600">Exchange</p>
-                <p className="font-medium">{companyData.exchange}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Exchange</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{companyData.exchange}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Sector</p>
-                <p className="font-medium">{companyData.sector}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Sector</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{companyData.sector}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Industry</p>
-                <p className="font-medium">{companyData.industry}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Industry</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{companyData.industry}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Country</p>
-                <p className="font-medium">{companyData.country}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Country</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{companyData.country}</p>
               </div>
             </div>
             
             {companyData.description && companyData.description !== 'No description available' && (
               <div>
-                <p className="text-sm text-gray-600 mb-2">Description</p>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  {companyData.description.length > 300 
-                    ? `${companyData.description.substring(0, 300)}...` 
+                <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Description</p>
+                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {companyData.description.length > 200 
+                    ? `${companyData.description.substring(0, 200)}...` 
                     : companyData.description
                   }
                 </p>
@@ -158,77 +158,77 @@ export default function CompanyProfile({ ticker }: CompanyProfileProps) {
 
           {/* Key Metrics */}
           <div>
-            <h4 className="text-md font-semibold mb-3 text-gray-900">Key Metrics</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-gray-50 p-3 rounded-md">
-                <p className="text-xs text-gray-600">Market Cap</p>
-                <p className="font-semibold">{formatNumber(companyData.marketCapitalization)}</p>
+            <h4 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">Key Metrics</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                <p className="text-xs text-gray-600 dark:text-gray-400">Market Cap</p>
+                <p className="font-semibold text-sm text-gray-900 dark:text-white">{formatNumber(companyData.marketCapitalization)}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-md">
-                <p className="text-xs text-gray-600">P/E Ratio</p>
-                <p className="font-semibold">{formatRatio(companyData.peRatio)}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                <p className="text-xs text-gray-600 dark:text-gray-400">P/E Ratio</p>
+                <p className="font-semibold text-sm text-gray-900 dark:text-white">{formatRatio(companyData.peRatio)}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-md">
-                <p className="text-xs text-gray-600">EPS</p>
-                <p className="font-semibold">${formatRatio(companyData.eps)}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                <p className="text-xs text-gray-600 dark:text-gray-400">EPS</p>
+                <p className="font-semibold text-sm text-gray-900 dark:text-white">${formatRatio(companyData.eps)}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-md">
-                <p className="text-xs text-gray-600">Beta</p>
-                <p className="font-semibold">{formatRatio(companyData.beta)}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-md">
+                <p className="text-xs text-gray-600 dark:text-gray-400">Beta</p>
+                <p className="font-semibold text-sm text-gray-900 dark:text-white">{formatRatio(companyData.beta)}</p>
               </div>
             </div>
           </div>
 
           {/* Financial Ratios */}
           <div>
-            <h4 className="text-md font-semibold mb-3 text-gray-900">Financial Ratios</h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <h4 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">Financial Ratios</h4>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               <div>
-                <p className="text-sm text-gray-600">Profit Margin</p>
-                <p className="font-medium">{formatPercentage(companyData.profitMargin)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Profit Margin</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{formatPercentage(companyData.profitMargin)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Operating Margin</p>
-                <p className="font-medium">{formatPercentage(companyData.operatingMarginTTM)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">Operating Margin</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{formatPercentage(companyData.operatingMarginTTM)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">ROE</p>
-                <p className="font-medium">{formatPercentage(companyData.returnOnEquityTTM)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">ROE</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{formatPercentage(companyData.returnOnEquityTTM)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">ROA</p>
-                <p className="font-medium">{formatPercentage(companyData.returnOnAssetsTTM)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">ROA</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{formatPercentage(companyData.returnOnAssetsTTM)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">P/B Ratio</p>
-                <p className="font-medium">{formatRatio(companyData.priceToBookRatio)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">P/B Ratio</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{formatRatio(companyData.priceToBookRatio)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">P/S Ratio</p>
-                <p className="font-medium">{formatRatio(companyData.priceToSalesRatioTTM)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">P/S Ratio</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">{formatRatio(companyData.priceToSalesRatioTTM)}</p>
               </div>
             </div>
           </div>
 
           {/* Stock Performance */}
           <div>
-            <h4 className="text-md font-semibold mb-3 text-gray-900">Stock Performance</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <h4 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">Stock Performance</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div>
-                <p className="text-sm text-gray-600">52W High</p>
-                <p className="font-medium">${formatRatio(companyData.weekHigh52)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">52W High</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">${formatRatio(companyData.weekHigh52)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">52W Low</p>
-                <p className="font-medium">${formatRatio(companyData.weekLow52)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">52W Low</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">${formatRatio(companyData.weekLow52)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">50D MA</p>
-                <p className="font-medium">${formatRatio(companyData.movingAverage50Day)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">50D MA</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">${formatRatio(companyData.movingAverage50Day)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">200D MA</p>
-                <p className="font-medium">${formatRatio(companyData.movingAverage200Day)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">200D MA</p>
+                <p className="font-medium text-sm text-gray-900 dark:text-white">${formatRatio(companyData.movingAverage200Day)}</p>
               </div>
             </div>
           </div>
@@ -236,19 +236,19 @@ export default function CompanyProfile({ ticker }: CompanyProfileProps) {
           {/* Dividend Info */}
           {companyData.dividendPerShare !== 'N/A' && companyData.dividendPerShare !== '0' && (
             <div>
-              <h4 className="text-md font-semibold mb-3 text-gray-900">Dividend Information</h4>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <h4 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">Dividend Information</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div>
-                  <p className="text-sm text-gray-600">Dividend Per Share</p>
-                  <p className="font-medium">${companyData.dividendPerShare}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Dividend Per Share</p>
+                  <p className="font-medium text-sm text-gray-900 dark:text-white">${companyData.dividendPerShare}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Dividend Yield</p>
-                  <p className="font-medium">{formatPercentage(companyData.dividendYield)}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Dividend Yield</p>
+                  <p className="font-medium text-sm text-gray-900 dark:text-white">{formatPercentage(companyData.dividendYield)}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Ex-Dividend Date</p>
-                  <p className="font-medium">{companyData.exDividendDate}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Ex-Dividend Date</p>
+                  <p className="font-medium text-sm text-gray-900 dark:text-white">{companyData.exDividendDate}</p>
                 </div>
               </div>
             </div>

@@ -54,9 +54,9 @@ export default function ConfirmationModal({
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
         <div className="mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
             Confirm {isBuy ? 'Purchase' : 'Sale'}
           </h2>
         </div>
@@ -64,21 +64,21 @@ export default function ConfirmationModal({
         {/* Trade Details */}
         <div className="space-y-3 mb-6">
           <div className="flex justify-between">
-            <span className="text-gray-600">Stock:</span>
-            <span className="font-medium">{tradeData.ticker}</span>
+            <span className="text-gray-600 dark:text-gray-400">Stock:</span>
+            <span className="font-medium text-gray-900 dark:text-white">{tradeData.ticker}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600">Quantity:</span>
-            <span className="font-medium">{tradeData.quantity} shares</span>
+            <span className="text-gray-600 dark:text-gray-400">Quantity:</span>
+            <span className="font-medium text-gray-900 dark:text-white">{tradeData.quantity} shares</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600">Price per share:</span>
-            <span className="font-medium">${tradeData.price.toFixed(2)}</span>
+            <span className="text-gray-600 dark:text-gray-400">Price per share:</span>
+            <span className="font-medium text-gray-900 dark:text-white">${tradeData.price.toFixed(2)}</span>
           </div>
-          <div className="border-t pt-3">
+          <div className="border-t border-gray-200 dark:border-gray-600 pt-3">
             <div className="flex justify-between text-lg font-semibold">
-              <span>Total {isBuy ? 'Cost' : 'Proceeds'}:</span>
-              <span className={isBuy ? 'text-red-600' : 'text-green-600'}>
+              <span className="text-gray-900 dark:text-white">Total {isBuy ? 'Cost' : 'Proceeds'}:</span>
+              <span className={isBuy ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}>
                 ${isBuy ? '-' : '+'}{tradeData.total.toFixed(2)}
               </span>
             </div>
@@ -87,9 +87,9 @@ export default function ConfirmationModal({
 
         {/* Current Holdings Info */}
         {tradeData.currentHolding && (
-          <div className="bg-gray-50 rounded-md p-3 mb-4">
-            <p className="text-sm text-gray-600 mb-1">Current Holdings:</p>
-            <p className="text-sm font-medium">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-md p-3 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Current Holdings:</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
               {tradeData.currentHolding.shares} shares @ ${tradeData.currentHolding.averagePrice.toFixed(2)} avg
             </p>
           </div>
@@ -97,16 +97,16 @@ export default function ConfirmationModal({
 
         {/* Warnings */}
         {hasInsufficientFunds && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
-            <p className="text-sm text-red-700">
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-md p-3 mb-4">
+            <p className="text-sm text-red-700 dark:text-red-300">
               Insufficient funds. You need ${tradeData.total.toFixed(2)} but only have ${userCash.toFixed(2)}.
             </p>
           </div>
         )}
 
         {hasInsufficientShares && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
-            <p className="text-sm text-red-700">
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-md p-3 mb-4">
+            <p className="text-sm text-red-700 dark:text-red-300">
               Insufficient shares. You need {tradeData.quantity} shares but only have {tradeData.currentHolding?.shares || 0}.
             </p>
           </div>
@@ -116,7 +116,7 @@ export default function ConfirmationModal({
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           >
             Cancel
           </button>

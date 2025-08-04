@@ -83,11 +83,11 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
   const getSentimentColor = (sentiment: string): string => {
     switch (sentiment) {
       case 'positive':
-        return 'text-green-600 bg-green-100';
+        return 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30';
       case 'negative':
-        return 'text-red-600 bg-red-100';
+        return 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700';
     }
   };
 
@@ -115,13 +115,13 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-semibold">Market News</h2>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Market News</h2>
         
         <div className="flex items-center gap-4">
           {newsData?.lastUpdated && (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Updated: {new Date(newsData.lastUpdated).toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
                 minute: '2-digit' 
@@ -130,7 +130,7 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
           )}
           <button
             onClick={() => fetchNews(selectedCategory)}
-            className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-md text-sm hover:bg-indigo-200 transition-colors flex items-center gap-1"
+            className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-md text-sm hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors flex items-center gap-1"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -149,8 +149,8 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
               onClick={() => setSelectedCategory(category.value)}
               className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                 selectedCategory === category.value
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-indigo-600 dark:bg-indigo-500 text-white'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
             >
               {category.label}
@@ -163,7 +163,7 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <Spinner size="lg" />
-            <p className="mt-2 text-gray-600">Loading news...</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading news...</p>
           </div>
         </div>
       )}
@@ -171,8 +171,8 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
       {error && (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <p className="text-red-600 mb-2">Failed to load news</p>
-            <p className="text-sm text-gray-500 mb-4">{error}</p>
+            <p className="text-red-600 dark:text-red-400 mb-2">Failed to load news</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{error}</p>
             <button
               onClick={() => fetchNews(selectedCategory)}
               className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700"
@@ -186,20 +186,20 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
       {newsData && newsData.articles.length > 0 && !isLoading && (
         <div className="space-y-4">
           {newsData.articles.map((article) => (
-            <div key={article.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div key={article.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-800">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-1 leading-tight">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1 leading-tight">
                     <a 
                       href={article.url} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="hover:text-indigo-600 transition-colors"
+                      className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                     >
                       {article.title}
                     </a>
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 leading-relaxed">
                     {article.summary}
                   </p>
                 </div>
@@ -207,8 +207,8 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-gray-700">{article.source}</span>
-                  <span className="text-sm text-gray-500">{formatTimeAgo(article.publishedAt)}</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{article.source}</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">{formatTimeAgo(article.publishedAt)}</span>
                   <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getSentimentColor(article.sentiment)}`}>
                     {getSentimentIcon(article.sentiment)}
                     {article.sentiment}
@@ -221,7 +221,7 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
                       <button
                         key={ticker}
                         onClick={() => onTickerClick?.(ticker)}
-                        className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium hover:bg-blue-200 transition-colors"
+                        className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded text-xs font-medium hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
                       >
                         {ticker}
                       </button>
@@ -235,7 +235,7 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
       )}
 
       {newsData && newsData.articles.length === 0 && !isLoading && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
           <p>No news articles found for the selected category.</p>
         </div>
       )}
