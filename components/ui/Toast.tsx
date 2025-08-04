@@ -18,13 +18,13 @@ export default function Toast({
   duration = 3000 
 }: ToastProps) {
   useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, duration);
-      
-      return () => clearTimeout(timer);
-    }
+    if (!isVisible) return;
+    
+    const timer = setTimeout(() => {
+      onClose();
+    }, duration);
+    
+    return () => clearTimeout(timer);
   }, [isVisible, duration, onClose]);
 
   if (!isVisible) return null;

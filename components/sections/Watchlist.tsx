@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Quote } from '@/lib/types';
 import Spinner from '@/components/ui/Spinner';
 
@@ -22,7 +22,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
   const [watchlistData, setWatchlistData] = useState<Record<string, WatchlistItem>>({});
   const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
 
-  const fetchQuoteForTicker = async (ticker: string) => {
+  const fetchQuoteForTicker = useCallback(async (ticker: string) => {
     setWatchlistData(prev => ({
       ...prev,
       [ticker]: {
@@ -52,7 +52,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
           priceChangePercent: previousPrice ? ((quote.price - previousPrice) / previousPrice) * 100 : undefined
         }
       }));
-    } catch (error) {
+    } catch {
       setWatchlistData(prev => ({
         ...prev,
         [ticker]: {
@@ -62,9 +62,9 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
         }
       }));
     }
-  };
+  }, [watchlistData]);
 
-  const updateAllPrices = async () => {
+  const updateAllPrices = useCallback(async () => {
     if (watchlist.length === 0) return;
     
     setLastUpdateTime(new Date());
@@ -73,7 +73,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
     await Promise.all(
       watchlist.map(ticker => fetchQuoteForTicker(ticker))
     );
-  };
+  }, [watchlist, fetchQuoteForTicker]);
 
   // Initialize watchlist data when watchlist changes
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
       });
       return filtered;
     });
-  }, [watchlist]);
+  }, [watchlist, watchlistData]);
 
   // Initial load and periodic updates
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
     // Update prices every 60 seconds
     const interval = setInterval(updateAllPrices, 60000);
     return () => clearInterval(interval);
-  }, [watchlist]);
+  }, [watchlist, updateAllPrices]);
 
   const formatPriceChange = (change: number, changePercent: number) => {
     const isPositive = change >= 0;
