@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { ApiError, CompanyOfficer } from '@/lib/types';
 
 // Define interface for company overview data
 interface CompanyOverview {
@@ -59,7 +60,7 @@ interface YahooFinanceQuoteSummary {
         sector: string;
         longBusinessSummary: string;
         fullTimeEmployees: number;
-        companyOfficers: any[];
+        companyOfficers: CompanyOfficer[];
       };
       summaryDetail: {
         previousClose: number;
@@ -116,7 +117,7 @@ interface YahooFinanceQuoteSummary {
         financialCurrency: string;
       };
     }>;
-    error?: any;
+    error?: ApiError;
   };
 }
 

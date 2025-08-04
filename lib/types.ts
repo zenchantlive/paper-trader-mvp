@@ -107,3 +107,31 @@ export interface NewsArticle {
   sentiment: 'positive' | 'negative' | 'neutral';
   tickers?: string[];
 }
+
+// Error handling interfaces
+export interface ApiError {
+  message: string;
+  code?: string;
+  details?: unknown;
+}
+
+// Company officer interface for company overview
+export interface CompanyOfficer {
+  name?: string;
+  title?: string;
+  pay?: number;
+  exercisedValue?: number;
+  unexercisedValue?: number;
+  yearBorn?: number;
+}
+
+// Recharts tooltip interface
+export interface RechartsTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    name: string;
+    payload: HistoricalDataPoint;
+  }>;
+  label?: string;
+}

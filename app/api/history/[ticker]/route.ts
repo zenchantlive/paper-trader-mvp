@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { ApiError } from '@/lib/types';
 
 // Define interfaces for historical data
 interface HistoricalDataPoint {
@@ -34,7 +35,7 @@ interface YahooFinanceResponse {
         }>;
       };
     }>;
-    error?: any;
+    error?: ApiError;
   };
 }
 

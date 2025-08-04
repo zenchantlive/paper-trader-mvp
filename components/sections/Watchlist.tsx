@@ -84,6 +84,8 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
           [ticker]: {
             symbol: ticker,
             price: 0,
+            change: 0,
+            changePercent: 0,
             isLoading: true,
             error: null,
             lastUpdated: null
@@ -106,13 +108,13 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
 
   // Initial load and periodic updates
   useEffect(() => {
-    if (watchlist.length > 0) {
-      updateAllPrices();
-      
-      // Update prices every 60 seconds
-      const interval = setInterval(updateAllPrices, 60000);
-      return () => clearInterval(interval);
-    }
+    if (watchlist.length === 0) return;
+    
+    updateAllPrices();
+    
+    // Update prices every 60 seconds
+    const interval = setInterval(updateAllPrices, 60000);
+    return () => clearInterval(interval);
   }, [watchlist]);
 
   const formatPriceChange = (change: number, changePercent: number) => {

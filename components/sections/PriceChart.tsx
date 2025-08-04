@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
   ReferenceLine 
 } from 'recharts';
-import { HistoricalData, HistoricalDataPoint } from '@/lib/types';
+import { HistoricalData, RechartsTooltipProps } from '@/lib/types';
 import Spinner from '@/components/ui/Spinner';
 
 interface PriceChartProps {
@@ -90,7 +90,8 @@ export default function PriceChart({ ticker, currentPrice }: PriceChartProps) {
     }
   };
 
-  const formatTooltipLabel = (label: string) => {
+  const formatTooltipLabel = (label: string | undefined) => {
+    if (!label) return '';
     const date = new Date(label);
     if (selectedPeriod === '1D') {
       return date.toLocaleString('en-US', {
@@ -109,7 +110,7 @@ export default function PriceChart({ ticker, currentPrice }: PriceChartProps) {
     }
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: RechartsTooltipProps) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (

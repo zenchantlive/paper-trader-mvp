@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { ApiError } from '@/lib/types';
 
 // Define a type for the transformed quote data for better type safety
 interface TransformedQuote {
@@ -20,7 +21,7 @@ interface YahooFinanceResponse {
         marketState: string;
       };
     }>;
-    error?: any;
+    error?: ApiError;
   };
 }
 
