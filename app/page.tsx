@@ -11,6 +11,7 @@ import CompanyProfile from '@/components/sections/CompanyProfile';
 import NewsFeed from '@/components/sections/NewsFeed';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import Toast, { useToast } from '@/components/ui/Toast';
+import { useTheme } from '@/components/ui/ThemeProvider';
 
 export default function Home() {
   const [portfolio, setPortfolio] = useState<Portfolio>({
@@ -32,6 +33,7 @@ export default function Home() {
   const [watchlist, setWatchlist] = useState<string[]>([]);
   
   const { toast, showToast, hideToast } = useToast();
+  const { theme, toggleTheme } = useTheme();
 
   const resetAllData = () => {
     // Clear all localStorage data
@@ -397,19 +399,34 @@ export default function Home() {
   }, [searchError]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Paper Trader MVP</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Paper Trader MVP</h1>
             <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-600">
-                Portfolio Value: <span className="font-semibold text-indigo-600">${portfolio.totalValue.toLocaleString()}</span>
+              <div className="text-sm text-gray-600 dark:text-gray-300">
+                Portfolio Value: <span className="font-semibold text-indigo-600 dark:text-indigo-400">${portfolio.totalValue.toLocaleString()}</span>
               </div>
-              <div className="text-sm text-gray-600">
-                Cash: <span className="font-semibold text-green-600">${portfolio.cash.toLocaleString()}</span>
+              <div className="text-sm text-gray-600 dark:text-gray-300">
+                Cash: <span className="font-semibold text-green-600 dark:text-green-400">${portfolio.cash.toLocaleString()}</span>
               </div>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              >
+                {theme === 'dark' ? (
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                  </svg>
+                )}
+              </button>
               <button
                 onClick={resetAllData}
                 className="px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
@@ -474,12 +491,12 @@ export default function Home() {
 
         {/* Error Messages */}
         {searchError && (
-          <div className="p-4 bg-red-100 text-red-700 rounded-md text-center">
+          <div className="p-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-md text-center">
             {searchError}
           </div>
         )}
         {tradeError && (
-          <div className="p-4 bg-red-100 text-red-700 rounded-md text-center">
+          <div className="p-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-md text-center">
             {tradeError}
           </div>
         )}

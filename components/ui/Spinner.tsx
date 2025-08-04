@@ -29,11 +29,11 @@ export default function Spinner({
       case 'white':
         return 'text-white';
       case 'blue':
-        return 'text-indigo-600';
+        return 'text-indigo-600 dark:text-indigo-400';
       case 'gray':
-        return 'text-gray-600';
+        return 'text-gray-600 dark:text-gray-400';
       default:
-        return 'text-indigo-600';
+        return 'text-indigo-600 dark:text-indigo-400';
     }
   };
 
@@ -66,10 +66,10 @@ export default function Spinner({
 // Skeleton loading component for quote display
 export function QuoteSkeleton() {
   return (
-    <div className="mb-4 p-4 bg-gray-50 rounded-md animate-pulse">
-      <div className="h-5 bg-gray-200 rounded w-32 mb-2"></div>
-      <div className="h-4 bg-gray-200 rounded w-20 mb-3"></div>
-      <div className="h-8 bg-gray-200 rounded w-24"></div>
+    <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md animate-pulse">
+      <div className="h-5 bg-gray-200 dark:bg-gray-600 rounded w-32 mb-2"></div>
+      <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-20 mb-3"></div>
+      <div className="h-8 bg-gray-200 dark:bg-gray-600 rounded w-24"></div>
     </div>
   );
 }

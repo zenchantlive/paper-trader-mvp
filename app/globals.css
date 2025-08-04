@@ -1,26 +1,90 @@
 @import "tailwindcss";
 
 :root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+:root.light {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@theme inline {
+html.light {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+/* Default dark mode with subtle professional gradient animation */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; 
+  background: linear-gradient(-45deg, 
+    rgba(30, 41, 59, 0.4),    /* slate-800 with opacity */
+    rgba(51, 65, 85, 0.3),    /* slate-700 with opacity */
+    rgba(15, 23, 42, 0.5),    /* slate-900 with opacity */
+    rgba(30, 58, 138, 0.3)    /* blue-900 with opacity */
+  );
+  background-size: 400% 400%;
+  animation: subtleGradient 20s ease infinite;
+  z-index: -1;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* Light mode - hide the gradient animation */
+.light body::before {
+  opacity: 0;
+}
+
+/* Enhanced keyframe animation - more subtle and professional */
+@keyframes subtleGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }

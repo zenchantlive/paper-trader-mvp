@@ -120,7 +120,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
 
   const formatPriceChange = (change: number, changePercent: number) => {
     const isPositive = change >= 0;
-    const colorClass = isPositive ? 'text-green-600' : 'text-red-600';
+    const colorClass = isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
     const symbol = isPositive ? '+' : '';
     
     return (
@@ -133,10 +133,10 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
 
   if (watchlist.length === 0) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold mb-4">Watchlist</h2>
-        <div className="text-center py-8 text-gray-500">
-          <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold mb-3 dark:text-white">Watchlist</h2>
+        <div className="text-center py-6 text-gray-500 dark:text-gray-400">
+          <svg className="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>
@@ -148,13 +148,13 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold">Watchlist</h2>
+    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xl font-semibold dark:text-white">Watchlist</h2>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {lastUpdateTime && (
-            <p className="text-sm text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Last updated: {lastUpdateTime.toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
                 minute: '2-digit' 
@@ -163,7 +163,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
           )}
           <button
             onClick={updateAllPrices}
-            className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-md text-sm hover:bg-indigo-200 transition-colors flex items-center gap-1"
+            className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-md text-xs hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors flex items-center gap-1"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -173,18 +173,18 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {watchlist.map(ticker => {
           const item = watchlistData[ticker];
           
           return (
-            <div key={ticker} className="flex items-center justify-between p-4 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors">
-              <div className="flex items-center gap-4">
+            <div key={ticker} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+              <div className="flex items-center gap-3">
                 <button
                   onClick={() => onTickerClick(ticker)}
-                  className="text-left hover:text-indigo-600 transition-colors"
+                  className="text-left hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                 >
-                  <h3 className="font-semibold text-lg">{ticker}</h3>
+                  <h3 className="font-semibold text-base dark:text-white">{ticker}</h3>
                 </button>
                 
                 {item?.isLoading && (
@@ -192,15 +192,15 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
                 )}
                 
                 {item?.error && (
-                  <span className="text-sm text-red-600">{item.error}</span>
+                  <span className="text-sm text-red-600 dark:text-red-400">{item.error}</span>
                 )}
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 {item && !item.isLoading && !item.error && (
                   <>
                     <div className="text-right">
-                      <div className="text-xl font-bold">${item.price.toFixed(2)}</div>
+                      <div className="text-lg font-bold dark:text-white">${item.price.toFixed(2)}</div>
                       {item.priceChange !== undefined && item.priceChangePercent !== undefined && (
                         formatPriceChange(item.priceChange, item.priceChangePercent)
                       )}
@@ -210,10 +210,10 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
 
                 <button
                   onClick={() => removeFromWatchlist(ticker)}
-                  className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                  className="p-1 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                   title="Remove from watchlist"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -223,7 +223,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
         })}
       </div>
 
-      <div className="mt-4 text-center text-sm text-gray-500">
+      <div className="mt-3 text-center text-xs text-gray-500 dark:text-gray-400">
         Prices update automatically every 60 seconds
       </div>
     </div>
