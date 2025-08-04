@@ -39,19 +39,21 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
       }
       
       const quote: Quote = await response.json();
-      const previousPrice = watchlistData[ticker]?.price;
       
-      setWatchlistData(prev => ({
-        ...prev,
-        [ticker]: {
-          ...quote,
-          isLoading: false,
-          error: null,
-          lastUpdated: new Date(),
-          priceChange: previousPrice ? quote.price - previousPrice : undefined,
-          priceChangePercent: previousPrice ? ((quote.price - previousPrice) / previousPrice) * 100 : undefined
-        }
-      }));
+      setWatchlistData(prev => {
+        const previousPrice = prev[ticker]?.price;
+        return {
+          ...prev,
+          [ticker]: {
+            ...quote,
+            isLoading: false,
+            error: null,
+            lastUpdated: new Date(),
+            priceChange: previousPrice ? quote.price - previousPrice : undefined,
+            priceChangePercent: previousPrice ? ((quote.price - previousPrice) / previousPrice) * 100 : undefined
+          }
+        };
+      });
     } catch {
       setWatchlistData(prev => ({
         ...prev,
@@ -62,7 +64,7 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
         }
       }));
     }
-  }, [watchlistData]);
+  }, []);
 
   const updateAllPrices = useCallback(async () => {
     if (watchlist.length === 0) return;
@@ -77,11 +79,12 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
 
   // Initialize watchlist data when watchlist changes
   useEffect(() => {
-    watchlist.forEach(ticker => {
-      if (!watchlistData[ticker]) {
-        setWatchlistData(prev => ({
-          ...prev,
-          [ticker]: {
+    setWatchlistData(prev => {
+      // Add new tickers to watchlist
+      const updated = { ...prev };
+      watchlist.forEach(ticker => {
+        if (!updated[ticker]) {
+          updated[ticker] = {
             symbol: ticker,
             price: 0,
             change: 0,
@@ -89,22 +92,20 @@ export default function Watchlist({ watchlist, removeFromWatchlist, onTickerClic
             isLoading: true,
             error: null,
             lastUpdated: null
-          }
-        }));
-      }
-    });
+          };
+        }
+      });
 
-    // Remove data for tickers no longer in watchlist
-    setWatchlistData(prev => {
+      // Remove tickers no longer in watchlist
       const filtered: Record<string, WatchlistItem> = {};
       watchlist.forEach(ticker => {
-        if (prev[ticker]) {
-          filtered[ticker] = prev[ticker];
+        if (updated[ticker]) {
+          filtered[ticker] = updated[ticker];
         }
       });
       return filtered;
     });
-  }, [watchlist, watchlistData]);
+  }, [watchlist]);
 
   // Initial load and periodic updates
   useEffect(() => {
