@@ -12,6 +12,8 @@ interface NewsResponse {
   articles: NewsArticle[];
   total: number;
   lastUpdated: string;
+  cached?: boolean;
+  stats?: any;
 }
 
 const CATEGORIES = [
@@ -19,11 +21,13 @@ const CATEGORIES = [
   { value: 'Markets', label: 'Markets' },
   { value: 'Economy', label: 'Economy' },
   { value: 'Commodities', label: 'Commodities' },
+  { value: 'Technology', label: 'Technology' },
   { value: 'Automotive', label: 'Automotive' },
   { value: 'Banking', label: 'Banking' },
   { value: 'Cryptocurrency', label: 'Crypto' },
   { value: 'Healthcare', label: 'Healthcare' },
-  { value: 'Retail', label: 'Retail' }
+  { value: 'Retail', label: 'Retail' },
+  { value: 'Business', label: 'Business' }
 ];
 
 export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
@@ -31,6 +35,7 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
 
   const fetchNews = async (category: string = 'all') => {
     setIsLoading(true);
@@ -62,14 +67,28 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
 
   useEffect(() => {
     fetchNews(selectedCategory);
-  }, [selectedCategory]);
+    
+    // Set up auto-refresh every 2 minutes if enabled
+    let interval: NodeJS.Timeout;
+    if (autoRefresh) {
+      interval = setInterval(() => {
+        fetchNews(selectedCategory);
+      }, 2 * 60 * 1000); // 2 minutes
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [selectedCategory, autoRefresh]);
 
   const formatTimeAgo = (dateString: string): string => {
     const now = new Date();
     const publishedAt = new Date(dateString);
     const diffInMinutes = Math.floor((now.getTime() - publishedAt.getTime()) / (1000 * 60));
 
-    if (diffInMinutes < 60) {
+    if (diffInMinutes < 1) {
+      return 'Just now';
+    } else if (diffInMinutes < 60) {
       return `${diffInMinutes}m ago`;
     } else if (diffInMinutes < 1440) { // 24 hours
       const hours = Math.floor(diffInMinutes / 60);
@@ -121,22 +140,47 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
         
         <div className="flex items-center gap-4">
           {newsData?.lastUpdated && (
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Updated: {new Date(newsData.lastUpdated).toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-              })}
-            </p>
+            <div className="flex items-center gap-2">
+              {newsData.cached && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 rounded-full text-xs">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  Cached
+                </span>
+              )}
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Updated: {new Date(newsData.lastUpdated).toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
+              </p>
+            </div>
           )}
-          <button
-            onClick={() => fetchNews(selectedCategory)}
-            className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-md text-sm hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors flex items-center gap-1"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Refresh
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setAutoRefresh(!autoRefresh)}
+              className={`px-3 py-1 rounded-md text-sm transition-colors flex items-center gap-1 ${
+                autoRefresh 
+                  ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300' 
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Auto {autoRefresh ? 'On' : 'Off'}
+            </button>
+            <button
+              onClick={() => fetchNews(selectedCategory)}
+              className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-md text-sm hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors flex items-center gap-1"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Refresh
+            </button>
+          </div>
         </div>
       </div>
 
@@ -205,13 +249,22 @@ export default function NewsFeed({ onTickerClick }: NewsFeedProps) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-4 flex-wrap">
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{article.source}</span>
                   <span className="text-sm text-gray-500 dark:text-gray-400">{formatTimeAgo(article.publishedAt)}</span>
                   <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getSentimentColor(article.sentiment)}`}>
                     {getSentimentIcon(article.sentiment)}
                     {article.sentiment}
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {Math.round(article.relevanceScore * 100)}%
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                    {article.category}
                   </span>
                 </div>
 
